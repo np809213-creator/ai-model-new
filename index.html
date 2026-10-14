@@ -1,0 +1,97 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Student Result</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #eef2ff;
+            text-align: center;
+            padding: 30px;
+        }
+        .container {
+            background: white;
+            max-width: 450px;
+            margin: auto;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px #cccccc;
+        }
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 8px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 12px 25px;
+            background: #4f46e5;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>College Student Result</h1>
+        <p>Enter student details and marks</p>
+
+        <input id="name" placeholder="Student Name">
+        <input id="roll" placeholder="Roll Number">
+        <input id="m1" type="number" placeholder="Subject 1 Marks (out of 100)" min="0" max="100">
+        <input id="m2" type="number" placeholder="Subject 2 Marks (out of 100)" min="0" max="100">
+        <input id="m3" type="number" placeholder="Subject 3 Marks (out of 100)" min="0" max="100">
+
+        <button onclick="calculateResult()">Calculate Result</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function calculateResult() {
+            const name = document.getElementById("name").value.trim();
+            const roll = document.getElementById("roll").value.trim();
+            const fields = ["m1", "m2", "m3"];
+            const values = fields.map(id => document.getElementById(id).value);
+
+            if (!name || !roll || values.some(v => v === "")) {
+                alert("Please fill in all details.");
+                return;
+            }
+
+            const marks = values.map(Number);
+            if (marks.some(m => !Number.isFinite(m) || m < 0 || m > 100)) {
+                alert("Enter marks between 0 and 100.");
+                return;
+            }
+
+            const total = marks.reduce((sum, m) => sum + m, 0);
+            const percentage = total / 3;
+            const grade = percentage >= 90 ? "A+" :
+                          percentage >= 80 ? "A" :
+                          percentage >= 70 ? "B" :
+                          percentage >= 60 ? "C" :
+                          percentage >= 40 ? "D" : "F";
+            const status = marks.every(m => m >= 35) ? "Pass" : "Fail";
+
+            document.getElementById("result").innerHTML =
+                `<h3>Student Result</h3>
+                 Name: ${name.replace(/[&<>"']/g, "")}<br>
+                 Roll No: ${roll.replace(/[&<>"']/g, "")}<br>
+                 Total Marks: ${total}/300<br>
+                 Percentage: ${percentage.toFixed(2)}%<br>
+                 Grade: ${grade}<br>
+                 Status: ${status}`;
+        }
+    </script>
+</body>
+</html>
+```
